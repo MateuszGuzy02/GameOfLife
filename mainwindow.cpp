@@ -47,6 +47,10 @@ void MainWindow::createGameBoard(int rows, int columns) {
     // Ustawienie rozciągliwego rozmiaru kolumn i wierszy
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Ustawienie stylu dla zaznaczonych komórek
+    QString style = "QTableWidget::item:selected { background-color: rgb(0, 153, 255); }";
+    ui->tableWidget->setStyleSheet(style);
 }
 
 void MainWindow::on_columnChanger_valueChanged(int newValue) {
