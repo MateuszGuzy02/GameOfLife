@@ -72,6 +72,16 @@ void GameOfLife::setBoardSize(int width, int height)
     board.resizeBoard(width, height);
 }
 
+void GameOfLife::onColumnChange(int newWidth) {
+    // Zmiana szerokości planszy na nową wartość `newWidth`
+    board.resizeBoard(newWidth, board.getHeight());
+}
+
+void GameOfLife::onRowChange(int newHeight) {
+    // Zmiana wysokości planszy na nową wartość `newHeight`
+    board.resizeBoard(board.getWidth(), newHeight);
+}
+
 void GameOfLife::setRandomSeed(unsigned int seed)
 {
     randomSeed = seed;

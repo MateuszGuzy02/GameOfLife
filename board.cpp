@@ -93,16 +93,19 @@ int Board::countAliveNeighbors(int x, int y) const
 
 bool Board::isAlive(const int x, const int y) const
 {
+    int dx[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
+    int dy[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
     int alive = 0;
 
-    if (x > 0 && cells[x - 1][y] == 1) alive += 1;                                  // lewy
-    if (x < height - 1 && cells[x + 1][y] == 1) alive += 1;                         // prawy
-    if (y > 0 && cells[x][y - 1] == 1) alive += 1;                                  // góra
-    if (y < width - 1 && cells[x][y + 1] == 1) alive += 1;                          // dół
-    if (x > 0 && y > 0 && cells[x - 1][y - 1] == 1) alive += 1;                     // lewy górny
-    if (x < height - 1 && y > 0 && cells[x + 1][y - 1] == 1) alive += 1;            // prawy górny
-    if (x > 0 && y < width - 1 && cells[x - 1][y + 1] == 1) alive += 1;             // lewy dolny
-    if (x < height - 1 && y < width - 1 && cells[x + 1][y + 1] == 1) alive += 1;    // prawy dolny
+    for (int i = 0; i < 8; ++i) {
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+
+        if (nx >= 0 && nx < height && ny >= 0 && ny < width) {
+            alive += cells[nx][ny];
+        }
+    }
 
     // ZASADY
     if (cells[x][y] == 1 && alive < 2) return false;
