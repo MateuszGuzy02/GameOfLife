@@ -1,0 +1,91 @@
+#include "gameoflife.h"
+#include <chrono>
+#include <thread>
+#include <iostream>
+
+using namespace std;
+
+void GameOfLife::start()
+{
+    int StepCount = 0;
+    isRunning = true;
+    timer.start();
+
+
+    while (isRunning)       // Włączanie pętli symulacji gry w życie
+    {
+        displayBoard();
+        step();              // Wykonaj krok symulacji
+        StepCount++;
+
+
+        int aliveCount = 0;
+        auto cells = board.getCells();
+        for (const auto& row : cells)
+        {
+            for (int cell : row)
+            {
+                if (cell == 1)
+                    aliveCount++;
+            }
+        }
+
+
+        if (aliveCount == 0)        // Jeśli liczba komórek żywych wynosi 0, zatrzymaj symulację
+        {
+            displayBoard();
+            stop();
+            cout << "No live cells. Simulation stopped after " << StepCount << " Steps." << endl;
+            break;
+        }
+    }
+
+    board.clear();
+}
+
+void GameOfLife::step()
+{
+    if (isRunning)
+        board.nextGeneration();
+}
+
+void GameOfLife::pause()
+{
+    isRunning = false;      // Zatrzymywanie symulacji
+    timer.pause();
+}
+
+void GameOfLife::resume()
+{
+    isRunning = true;      // Zatrzymywanie symulacji
+    timer.resume();
+}
+
+void GameOfLife::stop()
+{
+    isRunning = false;     // Zatrzymywanie symulacji
+    timer.stop();
+}
+
+void GameOfLife::setBoardSize(int width, int height)
+{
+    board.resizeBoard(width, height);
+}
+
+void GameOfLife::setRandomSeed(unsigned int seed)
+{
+    randomSeed = seed;
+    board.initializeBoardWithSeed(randomSeed);
+}
+
+void GameOfLife::resizeBoard(int width, int height)
+{
+    board.resizeBoard(width, height);
+}
+
+void GameOfLife::displayBoard() const
+{
+    timer.getRunning();
+    board.printBoard();
+    this_thread::sleep_for(chrono::milliseconds(timer.getInterval()));
+}
