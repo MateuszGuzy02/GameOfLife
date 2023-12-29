@@ -14,15 +14,11 @@ class GameOfLife: public QObject {
     Q_OBJECT
 
 signals:
-    void boardUpdated(); // Sygnał wywoływany przy aktualizacji planszy
-    void simulationFinishedSignal(); // Sygnał informujący o zakończeniu symulacji
-    void simulationPausedSignal();   // Sygnał informujący o wstrzymaniu symulacji
 
 private:
 
     Board board;
     bool isRunning;
-    bool isPaused; // Zmienna informująca o tym, czy symulacja jest wstrzymana
 
     unsigned int randomSeed;
 
@@ -49,8 +45,6 @@ public:
 public slots:
     void onColumnChange(int newWidth);
     void onRowChange(int newWidth);
-    void simulationFinished(); // Metoda sygnału informującego o zakończeniu symulacji
-    void simulationPaused();   // Metoda sygnału informującego o wstrzymaniu symulacji
 
 };
 

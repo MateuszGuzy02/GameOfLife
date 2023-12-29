@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Połączenie sygnału boardUpdated z funkcją onBoardUpdated
     connect(game, SIGNAL(boardUpdated()), this, SLOT(onBoardUpdated()));
 
+
     // Ukrycie nagłówków kolumn i wierszy w tableWidget
     ui->tableWidget->verticalHeader()->setVisible(false); // Ukrycie nagłówka kolumn
     ui->tableWidget->horizontalHeader()->setVisible(false); // Ukrycie nagłówka wierszy
