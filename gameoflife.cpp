@@ -2,6 +2,13 @@
 
 using namespace std;
 
+void GameOfLife::startSimulationInThread()
+{
+    QtConcurrent::run([this]() {
+        start();
+    });
+}
+
 void GameOfLife::start()
 {
     int StepCount = 0;
@@ -31,10 +38,13 @@ void GameOfLife::start()
             displayBoard();
             stop();
             cout << "No live cells. Simulation stopped after " << StepCount << " Steps." << endl;
+            // Emitowanie sygnału z aktualnym stanem komórek
+            emit boardUpdated(cells);
             break;
         }
+        // Emitowanie sygnału z aktualnym stanem komórek
+        emit boardUpdated(cells);
     }
-
     board.clear();
 }
 
@@ -96,5 +106,12 @@ void GameOfLife::displayBoard() const
     timer.getRunning();
     board.printBoard();
     this_thread::sleep_for(chrono::milliseconds(timer.getInterval()));
+}
+
+void GameOfLife::handleBoardUpdated(const std::vector<std::vector<int>>& cells)
+{
+    // Tutaj dodaj kod reagujący na zaktualizowaną planszę
+    // Możesz na przykład emitować sygnał boardUpdated do MainWindow
+    emit boardUpdated(cells);
 }
 

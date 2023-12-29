@@ -25,6 +25,7 @@ public:
     int& getCell(int x, int y) { return cells[x][y]; }
     std::vector<std::vector<int>>& getCells() { return cells; }
 
+
     void initializeBoard();
     void initializeBoardWithSeed(unsigned int seed, int newWidth, int newHeight);
     void resizeBoard(int newWidth, int newHeight);
@@ -35,6 +36,7 @@ public:
     int countAliveNeighbors(int x, int y) const;
     bool isAlive(const int x, const int y) const;
     std::vector<std::vector<int>> getCellsState() const;
+    void setCellState(int row, int col, int state);
 
     void updateCells();
 

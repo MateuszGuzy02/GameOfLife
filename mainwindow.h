@@ -23,8 +23,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    unsigned int randomSeed();
-
 private slots:
 
     void on_columnChanger_valueChanged(int newValue);
@@ -37,9 +35,12 @@ private slots:
     void onBoardUpdated();
     void on_randomSeedButton_clicked();
 
+    void onStartButtonClicked();
+    unsigned int randomSeed();
 
 private:
 
+    std::mt19937 generator;  // Generator liczb pseudolosowych
     Ui::MainWindow *ui;
     GameOfLife *game;
     Board *board;

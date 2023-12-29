@@ -28,16 +28,23 @@ void Board::initializeBoard()
 
 void Board::printBoard() const
 {
-    cout << endl;
-
     for (int i = 0; i < height; ++i)
     {
         for (int j = 0; j < width; ++j)
-            cout << (cells[i][j] ? 'O' : '.') << ' ';
-
-        cout << endl;
+        {
+            if (cells[i][j] == 1)
+            {
+                // Komórka żywa (1) - wyświetl jako niebieską
+                std::cout << "\033[1;34m" << cells[i][j] << "\033[0m" << " "; // Niebieski kolor
+            }
+            else
+            {
+                // Komórka martwa (0) - wyświetl jako białą
+                std::cout << "\033[1;37m" << cells[i][j] << "\033[0m" << " "; // Biały kolor
+            }
+        }
+        std::cout << std::endl;
     }
-    cout << endl;
 }
 
 
@@ -144,4 +151,14 @@ vector<std::vector<int>> Board::getCellsState() const {
 void Board::updateCells()
 {
     emit cellsUpdated(cells);
+}
+
+
+void Board::setCellState(int row, int col, int state) {
+    // Sprawdź, czy pozycja (row, col) jest w zakresie tablicy cells
+    if (row >= 0 && row < height && col >= 0 && col < width) {
+        cells[row][col] = state; // Ustaw stan komórki na daną wartość
+    } else {
+        cout << "Blad" << endl;
+    }
 }
