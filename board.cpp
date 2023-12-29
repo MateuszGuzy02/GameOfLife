@@ -73,6 +73,9 @@ void Board::nextGeneration()
     }
 
     cells = newCells;
+
+    // Emitowanie sygnału z nowym stanem komórek
+    emit cellsUpdated(cells);
 }
 
 int Board::countAliveNeighbors(int x, int y) const
@@ -129,4 +132,13 @@ void Board::initializeBoardWithSeed(unsigned int seed)
         for (int j = 0; j < width; ++j)
             cells[i][j] = dis(gen);                     // Użyj generatora liczb losowych z danym ziarnem
     }
+}
+
+vector<std::vector<int>> Board::getCellsState() const {
+    return cells;
+}
+
+void Board::updateCells()
+{
+    emit cellsUpdated(cells);
 }

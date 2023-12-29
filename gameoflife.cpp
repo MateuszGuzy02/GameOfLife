@@ -99,3 +99,8 @@ void GameOfLife::displayBoard() const
     board.printBoard();
     this_thread::sleep_for(chrono::milliseconds(timer.getInterval()));
 }
+
+void GameOfLife::updatedBoard()
+{
+    emit boardUpdated();
+}

@@ -1,9 +1,15 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <QObject>
 #include <vector>
 
-class Board {
+class Board : public QObject {
+    Q_OBJECT
+
+signals:
+    void cellsUpdated(const std::vector<std::vector<int>>& cells) const;
+
 private:
 
     std::vector<std::vector<int>> cells;
@@ -28,6 +34,9 @@ public:
 
     int countAliveNeighbors(int x, int y) const;
     bool isAlive(const int x, const int y) const;
+    std::vector<std::vector<int>> getCellsState() const;
+
+    void updateCells();
 
 };
 #endif // BOARD_H

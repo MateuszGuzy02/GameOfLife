@@ -9,6 +9,9 @@
 class GameOfLife: public QObject {
     Q_OBJECT
 
+signals:
+    void boardUpdated(); // Sygnał wywoływany przy aktualizacji planszy
+
 private:
 
     Board board;
@@ -32,6 +35,7 @@ public:
     void resizeBoard(int width, int height);
     bool getIsRunning() const { return isRunning; }
     void displayBoard() const;
+    void updatedBoard();
 
 public slots:
     void onColumnChange(int newWidth);
