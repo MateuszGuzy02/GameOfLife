@@ -137,21 +137,35 @@ unsigned int MainWindow::randomSeed()
 
 void MainWindow::on_randomSeedButton_clicked()
 {
-    // Wywołanie metody losowania seedu
-    randomSeed(); // Wygeneruj nowy seed
+    unsigned int seed = randomSeed();
 
-    board->initializeBoardWithSeed(randomSeed());
+    // Pobieranie aktulanego rozmiaru planszy
+    int newWidth = ui->tableWidget->columnCount();
+    int newHeight = ui->tableWidget->rowCount();
 
-    // Odśwież widok planszy
-    const auto& cells = board->getCells(); // Pobierz referencję do komórek planszy
-    for (int i = 0; i < cells.size(); ++i) {
-        for (int j = 0; j < cells[i].size(); ++j) {
-            if (cells[i][j] == 1) {
-                // Zaznacz komórki na planszy
-                QTableWidgetItem* item = ui->tableWidget->item(i, j);
-                if (item) {
-                    item->setBackground(QBrush(QColor(0, 153, 255))); // Ustaw kolor na niebieski dla żywych komórek
-                }
+
+    // Ustawienie nowego ziarna w obiekcie GameOfLife
+    game->setRandomSeed(seed);
+
+    // Zaktualizowanie planszy gry w życie
+    game->getBoard().resizeBoard(newWidth, newHeight);
+    game->getBoard().initializeBoardWithSeed(seed, newWidth, newHeight);
+
+    // Pobranie nowego stanu planszy
+    std::vector<std::vector<int>> newCells = game->getBoard().getCellsState();
+
+    // Aktualizacja wyświetlanego stanu planszy
+    for (int i = 0; i < newCells.size(); ++i) {
+        for (int j = 0; j < newCells[i].size(); ++j) {
+            QTableWidgetItem* item = ui->tableWidget->item(i, j);
+            if (!item) {
+                item = new QTableWidgetItem();
+                ui->tableWidget->setItem(i, j, item);
+            }
+            if (newCells[i][j] == 1) {
+                item->setBackground(QBrush(QColor(0, 153, 255))); // Ustaw kolor na niebieski dla żywych komórek
+            } else {
+                item->setBackground(QBrush(Qt::white)); // Ustaw biały kolor dla martwych komórek
             }
         }
     }

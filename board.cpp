@@ -119,11 +119,14 @@ bool Board::isAlive(const int x, const int y) const
     return false;
 }
 
-void Board::initializeBoardWithSeed(unsigned int seed)
+void Board::initializeBoardWithSeed(unsigned int seed, int newWidth, int newHeight)
 {
     random_device rd;
     mt19937 gen(seed);                                  // Użyj ziarna dla generatora liczb losowych
     uniform_int_distribution<> dis(0, 1);               // Zakres losowania: 0 lub 1
+
+    width = newWidth;
+    height = newHeight;
 
     cells.resize(height, vector<int>(width, 0));        // Inicjalizacja tablicy dynamicznej
 

@@ -26,7 +26,7 @@ public:
     std::vector<std::vector<int>>& getCells() { return cells; }
 
     void initializeBoard();
-    void initializeBoardWithSeed(unsigned int seed);
+    void initializeBoardWithSeed(unsigned int seed, int newWidth, int newHeight);
     void resizeBoard(int newWidth, int newHeight);
     void nextGeneration();
     void printBoard() const;

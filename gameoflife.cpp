@@ -85,7 +85,9 @@ void GameOfLife::onRowChange(int newHeight) {
 void GameOfLife::setRandomSeed(unsigned int seed)
 {
     randomSeed = seed;
-    board.initializeBoardWithSeed(randomSeed);
+    int width = board.getWidth();
+    int height = board.getHeight();
+    board.initializeBoardWithSeed(randomSeed, width, height);
 }
 
 void GameOfLife::resizeBoard(int width, int height)
