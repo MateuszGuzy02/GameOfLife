@@ -37,6 +37,7 @@ private slots:
     void onBoardUpdated();
     void on_randomSeedButton_clicked();
 
+
 private:
 
     Ui::MainWindow *ui;

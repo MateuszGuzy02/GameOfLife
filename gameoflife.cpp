@@ -1,52 +1,84 @@
 #include "gameoflife.h"
-#include <chrono>
-#include <thread>
-#include <iostream>
 
 using namespace std;
 
 void GameOfLife::start()
 {
-    int StepCount = 0;
-    isRunning = true;
-    timer.start();
+    // Uruchomienie algorytmu w oddzielnym wątku
+    QtConcurrent::run([this]() {
+        int stepCount = 0;
 
+        while (isRunning) {
+            step(); // Wykonaj krok symulacji
+            QThread::msleep(100); // Pauza między krokami (np. 100ms)
 
-    while (isRunning)       // Włączanie pętli symulacji gry w życie
-    {
-        displayBoard();
-        step();              // Wykonaj krok symulacji
-        StepCount++;
+            stepCount++;
 
+            int aliveCount = 0;
+            auto cells = board.getCells();
+            for (const auto& row : cells) {
+                for (int cell : row) {
+                    if (cell == 1)
+                        aliveCount++;
+                }
+            }
 
-        int aliveCount = 0;
-        auto cells = board.getCells();
-        for (const auto& row : cells)
-        {
-            for (int cell : row)
-            {
-                if (cell == 1)
-                    aliveCount++;
+            if (aliveCount == 0) {
+                displayBoard();
+                stop();
+                cout << "No live cells. Simulation stopped after " << stepCount << " Steps." << endl;
+                break;
             }
         }
 
+        // Po zakończeniu pętli wyślij sygnał o aktualizacji planszy
+        emit boardUpdated();
+        board.clear();
+    });
+}
 
-        if (aliveCount == 0)        // Jeśli liczba komórek żywych wynosi 0, zatrzymaj symulację
-        {
-            displayBoard();
-            stop();
-            cout << "No live cells. Simulation stopped after " << StepCount << " Steps." << endl;
-            break;
+void GameOfLife::runSimulation()
+{
+    int stepCount = 0;
+
+    while (isRunning) {
+        if (!isPaused) {
+            board.nextGeneration(); // Wygeneruj następną generację planszy
+            emit boardUpdated(); // Emituj sygnał informujący o aktualizacji planszy
+
+            stepCount++;
+
+            int aliveCount = 0;
+            auto cells = board.getCells();
+            for (const auto& row : cells) {
+                for (int cell : row) {
+                    if (cell == 1)
+                        aliveCount++;
+                }
+            }
+
+            if (aliveCount == 0) {
+                stop();
+                emit simulationFinished();
+                break;
+            }
+
+            QThread::msleep(timer.getInterval()); // Odczekaj czas określony przez timer
+        } else {
+            QThread::msleep(100); // Odczekaj, jeśli symulacja jest wstrzymana
         }
     }
-
-    board.clear();
+    // Opcjonalnie: wywołanie czyszczenia planszy po zakończeniu symulacji
+     board.clear();
 }
 
 void GameOfLife::step()
 {
     if (isRunning)
+    {
         board.nextGeneration();
+        emit boardUpdated(); // Emituj sygnał informujący o aktualizacji planszy
+    }
 }
 
 void GameOfLife::pause()
@@ -106,3 +138,14 @@ void GameOfLife::updatedBoard()
 {
     emit boardUpdated();
 }
+
+void GameOfLife::simulationFinished() {
+    isRunning = false; // Zatrzymaj symulację
+    emit simulationFinishedSignal(); // Emituj sygnał informujący o zakończeniu symulacji
+}
+
+void GameOfLife::simulationPaused() {
+    isPaused = true; // Ustaw zmienną informującą o wstrzymaniu symulacji
+    emit simulationPausedSignal(); // Emituj sygnał informujący o wstrzymaniu symulacji
+}
+

@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Podłączanie sygnału kliknięcia przycisku do metody obsługującej
     connect(ui->randomSeedButton, &QPushButton::clicked, this, &MainWindow::randomSeed);
 
+    // Połączenie sygnału boardUpdated z funkcją onBoardUpdated
+    connect(game, SIGNAL(boardUpdated()), this, SLOT(onBoardUpdated()));
 
     // Ukrycie nagłówków kolumn i wierszy w tableWidget
     ui->tableWidget->verticalHeader()->setVisible(false); // Ukrycie nagłówka kolumn
@@ -170,4 +172,3 @@ void MainWindow::on_randomSeedButton_clicked()
         }
     }
 }
-
