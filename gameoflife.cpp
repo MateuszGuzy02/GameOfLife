@@ -114,4 +114,3 @@ void GameOfLife::handleBoardUpdated(const std::vector<std::vector<int>>& cells)
     // Możesz na przykład emitować sygnał boardUpdated do MainWindow
     emit boardUpdated(cells);
 }
-
